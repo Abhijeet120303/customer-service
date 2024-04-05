@@ -18,168 +18,169 @@ import org.springframework.stereotype.Service;
 @Component
 public class CustomerServiceImpl implements CustomerService {
 
-	@Autowired
-	CustomerRepository customerRepo;
+  @Autowired CustomerRepository customerRepo;
 
-	@Autowired
-	CustomerResponse customerResponse;
+  @Autowired CustomerResponse customerResponse;
 
-	@Override
-	public CustomerResponse addCustomerDetails(CustomerRequest customerRequest) {
+  @Override
+  public CustomerResponse addCustomerDetails(CustomerRequest customerRequest) {
 
-		List<Customer> customerTables = customerRepo.findByEmailId(customerRequest.getEmailID());
+    List<Customer> customerTables = customerRepo.findByEmailId(customerRequest.getEmailID());
 
-		if (customerTables.size() == 1) {
-			customerResponse.setStatus(CustomerResponseCode.FAILED_CUSTOMER_ADD_EXISTS.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.FAILED_CUSTOMER_ADD_EXISTS.getMessage());
+    if (customerTables.size() == 1) {
+      customerResponse.setStatus(CustomerResponseCode.FAILED_CUSTOMER_ADD_EXISTS.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.FAILED_CUSTOMER_ADD_EXISTS.getMessage());
 
-		} else {
+    } else {
 
-			Customer customerTable = Customer.getInstance().setFirst_name(customerRequest.getFirstName())
-					.setMiddle_name(customerRequest.getMiddleName()).setLast_name(customerRequest.getLastName())
-					.setDate_of_birth(customerRequest.getDateOfBirth())
-					.setAddress_line1(customerRequest.getAddressLine1())
-					.setAddress_line2(customerRequest.getAddressLine2()).setZip(customerRequest.getZip())
-					.setCity(customerRequest.getCity()).setState(customerRequest.getState())
-					.setCountry(customerRequest.getCountry()).setMobile_phone(customerRequest.getMobilePhone())
-					.setHome_phone(customerRequest.getHomePhone()).setWork_phone(customerRequest.getWorkPhone())
-					.setEmailId(customerRequest.getEmailID()).setCustomer_id(customerRequest.getCustomerId())
-					.setCreated_date(LocalDateTime.now()).setUpdated_date(LocalDateTime.now());
+      Customer customerTable =
+          Customer.getInstance()
+              .setFirst_name(customerRequest.getFirstName())
+              .setMiddle_name(customerRequest.getMiddleName())
+              .setLast_name(customerRequest.getLastName())
+              .setDate_of_birth(customerRequest.getDateOfBirth())
+              .setAddress_line1(customerRequest.getAddressLine1())
+              .setAddress_line2(customerRequest.getAddressLine2())
+              .setZip(customerRequest.getZip())
+              .setCity(customerRequest.getCity())
+              .setState(customerRequest.getState())
+              .setCountry(customerRequest.getCountry())
+              .setMobile_phone(customerRequest.getMobilePhone())
+              .setHome_phone(customerRequest.getHomePhone())
+              .setWork_phone(customerRequest.getWorkPhone())
+              .setEmailId(customerRequest.getEmailID())
+              .setCustomer_id(customerRequest.getCustomerId())
+              .setCreated_date(LocalDateTime.now())
+              .setUpdated_date(LocalDateTime.now());
 
-			try {
-				customerTable = customerRepo.save(customerTable);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+      try {
+        customerTable = customerRepo.save(customerTable);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
 
-			customerResponse.setStatus(CustomerResponseCode.SUCCESS_CUSTOMER_ADD.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.SUCCESS_CUSTOMER_ADD.getMessage());
-			customerResponse.setCustomerCode(customerTable.getCustomer_code());
+      customerResponse.setStatus(CustomerResponseCode.SUCCESS_CUSTOMER_ADD.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.SUCCESS_CUSTOMER_ADD.getMessage());
+      customerResponse.setCustomerCode(customerTable.getCustomer_code());
+    }
+    return customerResponse;
+  }
 
-		}
-		return customerResponse;
-	}
+  public CustomerResponse updateCustomerDetails(String emailId, CustomerRequest customerRequest) {
 
-	public CustomerResponse updateCustomerDetails(String emailId, CustomerRequest customerRequest) {
+    List<Customer> customerTable = customerRepo.findByEmailId(emailId);
+    if (customerTable.isEmpty()) {
+      customerResponse.setStatus(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getMessage());
 
-		List<Customer> customerTable = customerRepo.findByEmailId(emailId);
-		if (customerTable.isEmpty()) {
-			customerResponse.setStatus(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.FAILED_UPDATE_CUSTOMER.getMessage());
+    } else {
+      Customer receivedData = customerTable.get(0);
 
-		} else {
-			Customer receivedData = customerTable.get(0);
+      receivedData.setFirst_name(customerRequest.getFirstName());
+      receivedData.setMiddle_name(customerRequest.getMiddleName());
+      receivedData.setLast_name(customerRequest.getLastName());
+      receivedData.setDate_of_birth(customerRequest.getDateOfBirth());
+      receivedData.setAddress_line1(customerRequest.getAddressLine1());
+      receivedData.setAddress_line2(customerRequest.getAddressLine2());
+      receivedData.setZip(customerRequest.getZip());
+      receivedData.setCity(customerRequest.getCity());
+      receivedData.setState(customerRequest.getState());
+      receivedData.setCountry(customerRequest.getCountry());
+      receivedData.setMobile_phone(customerRequest.getMobilePhone());
+      receivedData.setHome_phone(customerRequest.getHomePhone());
+      receivedData.setWork_phone(customerRequest.getWorkPhone());
+      receivedData.setEmailId(customerRequest.getEmailID());
+      receivedData.setCustomer_id(customerRequest.getCustomerId());
+      receivedData.setCreated_date(LocalDateTime.now());
+      receivedData.setUpdated_date(LocalDateTime.now());
 
-			receivedData.setFirst_name(customerRequest.getFirstName());
-			receivedData.setMiddle_name(customerRequest.getMiddleName());
-			receivedData.setLast_name(customerRequest.getLastName());
-			receivedData.setDate_of_birth(customerRequest.getDateOfBirth());
-			receivedData.setAddress_line1(customerRequest.getAddressLine1());
-			receivedData.setAddress_line2(customerRequest.getAddressLine2());
-			receivedData.setZip(customerRequest.getZip());
-			receivedData.setCity(customerRequest.getCity());
-			receivedData.setState(customerRequest.getState());
-			receivedData.setCountry(customerRequest.getCountry());
-			receivedData.setMobile_phone(customerRequest.getMobilePhone());
-			receivedData.setHome_phone(customerRequest.getHomePhone());
-			receivedData.setWork_phone(customerRequest.getWorkPhone());
-			receivedData.setEmailId(customerRequest.getEmailID());
-			receivedData.setCustomer_id(customerRequest.getCustomerId());
-			receivedData.setCreated_date(LocalDateTime.now());
-			receivedData.setUpdated_date(LocalDateTime.now());
+      receivedData = customerRepo.save(receivedData);
 
-			receivedData = customerRepo.save(receivedData);
+      customerResponse.setStatus(CustomerResponseCode.UPDATE_CUSTOMER_SUCCESS.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.UPDATE_CUSTOMER_SUCCESS.getMessage());
+      customerResponse.setCustomerCode(receivedData.getCustomer_code());
+    }
 
-			customerResponse.setStatus(CustomerResponseCode.UPDATE_CUSTOMER_SUCCESS.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.UPDATE_CUSTOMER_SUCCESS.getMessage());
-			customerResponse.setCustomerCode(receivedData.getCustomer_code());
+    return customerResponse;
+  }
 
-		}
+  public CustomerResponse findByMobileNumber(String emailId) {
+    CustomerResponse customerResponse = new CustomerResponse(); // Initialize customerResponse
 
-		return customerResponse;
+    List<Customer> customerTable = customerRepo.findByEmailId(emailId);
 
-	}
+    if (customerTable.isEmpty()) {
+      customerResponse.setStatus(CustomerResponseCode.FAILED_GET_CUSTOMER.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.FAILED_GET_CUSTOMER.getMessage());
 
-	public CustomerResponse findByMobileNumber(String emailId) {
-		CustomerResponse customerResponse = new CustomerResponse(); // Initialize customerResponse
+    } else {
+      Customer receivedData = customerTable.get(0);
 
-		List<Customer> customerTable = customerRepo.findByEmailId(emailId);
+      customerResponse.setCustomerCode(receivedData.getCustomer_code());
+      CustomerData customerData = new CustomerData();
+      customerData.setFirstName(receivedData.getFirst_name());
+      customerData.setMiddleName(receivedData.getMiddle_name());
+      customerData.setLastName(receivedData.getLast_name());
+      customerData.setDateOfBirth(receivedData.getDate_of_birth());
+      customerData.setAddressLine1(receivedData.getAddress_line1());
+      customerData.setAddressLine2(receivedData.getAddress_line2());
+      customerData.setZip(receivedData.getZip());
+      customerData.setCity(receivedData.getCity());
+      customerData.setState(receivedData.getState());
+      customerData.setCountry(receivedData.getCountry());
+      customerData.setMobilePhone(receivedData.getMobile_phone());
+      customerData.setHomePhone(receivedData.getHome_phone());
+      customerData.setWorkPhone(receivedData.getWork_phone());
+      customerData.setEmailID(receivedData.getEmailId());
+      customerData.setCustomerId(receivedData.getCustomer_id());
 
-		if (customerTable.isEmpty()) {
-			customerResponse.setStatus(CustomerResponseCode.FAILED_GET_CUSTOMER.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.FAILED_GET_CUSTOMER.getMessage());
+      customerResponse.setCustomerData(customerData);
 
-		} else {
-			Customer receivedData = customerTable.get(0);
+      customerResponse.setStatus(CustomerResponseCode.GET_SUCCESS_CUSTOMER.getStatus());
+      customerResponse.setMessage(CustomerResponseCode.GET_SUCCESS_CUSTOMER.getMessage());
+      customerResponse.setCustomerCode(receivedData.getCustomer_code());
+    }
 
-			customerResponse.setCustomerCode(receivedData.getCustomer_code());
-			CustomerData customerData = new CustomerData();
-			customerData.setFirstName(receivedData.getFirst_name());
-			customerData.setMiddleName(receivedData.getMiddle_name());
-			customerData.setLastName(receivedData.getLast_name());
-			customerData.setDateOfBirth(receivedData.getDate_of_birth());
-			customerData.setAddressLine1(receivedData.getAddress_line1());
-			customerData.setAddressLine2(receivedData.getAddress_line2());
-			customerData.setZip(receivedData.getZip());
-			customerData.setCity(receivedData.getCity());
-			customerData.setState(receivedData.getState());
-			customerData.setCountry(receivedData.getCountry());
-			customerData.setMobilePhone(receivedData.getMobile_phone());
-			customerData.setHomePhone(receivedData.getHome_phone());
-			customerData.setWorkPhone(receivedData.getWork_phone());
-			customerData.setEmailID(receivedData.getEmailId());
-			customerData.setCustomerId(receivedData.getCustomer_id());
+    return customerResponse;
+  }
 
-			customerResponse.setCustomerData(customerData);
+  public DiscountResponse getDiscount(DiscountRequest request) {
 
-			customerResponse.setStatus(CustomerResponseCode.GET_SUCCESS_CUSTOMER.getStatus());
-			customerResponse.setMessage(CustomerResponseCode.GET_SUCCESS_CUSTOMER.getMessage());
-			customerResponse.setCustomerCode(receivedData.getCustomer_code());
+    DiscountResponse response = new DiscountResponse();
 
-		}
+    String age = request.getAge();
+    String gender = request.getGender();
 
-		return customerResponse;
-	}
+    int discountPercent = calculateDiscount(age, gender);
 
-	public DiscountResponse getDiscount(DiscountRequest request) {
+    response.setDiscountPercent(String.valueOf(discountPercent));
 
-		DiscountResponse response = new DiscountResponse();
+    return response;
+  }
 
-		String age = request.getAge();
-		String gender = request.getGender();
+  private int calculateDiscount(String age, String gender) {
+    int discountPercent = 0;
 
-		int discountPercent = calculateDiscount(age, gender);
-
-		response.setDiscountPercent(String.valueOf(discountPercent));
-
-		return response;
-	}
-
-	private int calculateDiscount(String age, String gender) {
-		int discountPercent = 0;
-
-		if (!age.isEmpty()) {
-			int ageValue = Integer.parseInt(age);
-			if (gender != null && gender.equals("M")) {
-				if (ageValue < 30) {
-					discountPercent = 10;
-				} else if (ageValue >= 30 && ageValue < 60) {
-					discountPercent = 5;
-				} else if (ageValue >= 60) {
-					discountPercent = 15;
-				}
-			} else if (gender != null && gender.equals("F")) {
-				if (ageValue < 30) {
-					discountPercent = 10 + 5;
-				} else if (ageValue >= 30 && ageValue < 60) {
-					discountPercent = 5 + 5;
-				} else if (ageValue >= 60) {
-					discountPercent = 15 + 5;
-				}
-			}
-		}
-		return discountPercent;
-
-	}
-
+    if (!age.isEmpty()) {
+      int ageValue = Integer.parseInt(age);
+      if (gender != null && gender.equals("M")) {
+        if (ageValue < 30) {
+          discountPercent = 10;
+        } else if (ageValue >= 30 && ageValue < 60) {
+          discountPercent = 5;
+        } else if (ageValue >= 60) {
+          discountPercent = 15;
+        }
+      } else if (gender != null && gender.equals("F")) {
+        if (ageValue < 30) {
+          discountPercent = 10 + 5;
+        } else if (ageValue >= 30 && ageValue < 60) {
+          discountPercent = 5 + 5;
+        } else if (ageValue >= 60) {
+          discountPercent = 15 + 5;
+        }
+      }
+    }
+    return discountPercent;
+  }
 }
