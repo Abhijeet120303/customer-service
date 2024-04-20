@@ -1,0 +1,40 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+
+	<changeSet id="202200717" author="Abhijeet Nirphal">
+		<insert tableName="Customer" schemaName="customer_liqibase">
+			<column name="customer_code" value="1" />
+			<column name="first_name" value="John" />
+			<column name="last_name" value="Doe" />
+			<column name="middle_name" value="M" />
+			<column name="date_of_birth" value="1990-01-01" />
+			<column name="address_line1" value="123 Main St" />
+			<column name="address_line2" value="Apt 101" />
+			<column name="zip" value="12345" />
+			<column name="city" value="Anytown" />
+			<column name="state" value="NY" />
+			<column name="country" value="USA" />
+		</insert>
+	</changeSet>
+	
+	<changeSet id="202200717-1" author="Abhijeet Nirphal">
+		<insert tableName="Customer" schemaName="customer_liqibase">
+			<column name="customer_code" value="2" />
+			<column name="first_name" value="Abhijeet" />
+			<column name="last_name" value="Nirphal" />
+			<column name="middle_name" value="Sayaji" />
+			<column name="date_of_birth" value="12-03-2003" />
+			<column name="address_line1" value="123 Main St" />
+			<column name="address_line2" value="Apt 101" />
+			<column name="zip" value="12345" />
+			<column name="city" value="Anytown" />
+			<column name="state" value="NY" />
+			<column name="country" value="USA" />
+		</insert>
+	</changeSet>
+
+
+</databaseChangeLog>

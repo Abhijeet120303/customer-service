@@ -109,6 +109,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     List<Customer> customerTable = customerRepo.findByEmailId(emailId);
 
+    System.out.println(customerTable);
     if (customerTable.isEmpty()) {
       customerResponse.setStatus(CustomerResponseCode.FAILED_GET_CUSTOMER.getStatus());
       customerResponse.setMessage(CustomerResponseCode.FAILED_GET_CUSTOMER.getMessage());
